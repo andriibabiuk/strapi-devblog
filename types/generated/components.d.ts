@@ -94,6 +94,19 @@ export interface LayoutNewsletterForm extends Struct.ComponentSchema {
   };
 }
 
+export interface LayoutPageInfo extends Struct.ComponentSchema {
+  collectionName: 'components_layout_page_infos';
+  info: {
+    displayName: 'PageInfo';
+    icon: 'layer';
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    cover: Schema.Attribute.Media<'images', true>;
+    seo: Schema.Attribute.Component<'seo.seo-information', false>;
+  };
+}
+
 export interface LayoutServicesPreview extends Struct.ComponentSchema {
   collectionName: 'components_layout_services_previews';
   info: {
@@ -189,6 +202,7 @@ declare module '@strapi/strapi' {
       'layout.link': LayoutLink;
       'layout.mission': LayoutMission;
       'layout.newsletter-form': LayoutNewsletterForm;
+      'layout.page-info': LayoutPageInfo;
       'layout.services-preview': LayoutServicesPreview;
       'seo.seo-information': SeoSeoInformation;
       'shared.media': SharedMedia;
