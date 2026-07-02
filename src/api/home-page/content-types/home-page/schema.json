@@ -43,6 +43,11 @@
         "layout.newsletter-form",
         "layout.mission"
       ]
+    },
+    "seo": {
+      "type": "component",
+      "component": "seo.seo-information",
+      "repeatable": false
     }
   }
 }
