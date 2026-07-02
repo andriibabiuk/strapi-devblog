@@ -101,7 +101,7 @@ export interface LayoutPageInfo extends Struct.ComponentSchema {
     icon: 'layer';
   };
   attributes: {
-    content: Schema.Attribute.Blocks;
+    content: Schema.Attribute.RichText & Schema.Attribute.Required;
     cover: Schema.Attribute.Media<'images', true>;
     seo: Schema.Attribute.Component<'seo.seo-information', false>;
   };
