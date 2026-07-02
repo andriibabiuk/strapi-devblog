@@ -4,7 +4,7 @@
   "info": {
     "singularName": "post",
     "pluralName": "posts",
-    "displayName": "post"
+    "displayName": "Post"
   },
   "options": {
     "draftAndPublish": true
@@ -34,12 +34,6 @@
         "images"
       ]
     },
-    "seoTitle": {
-      "type": "string"
-    },
-    "seoDescription": {
-      "type": "text"
-    },
     "authors": {
       "type": "relation",
       "relation": "oneToMany",
@@ -49,6 +43,11 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::tag.tag"
+    },
+    "seo": {
+      "type": "component",
+      "component": "seo.seo-information",
+      "repeatable": false
     }
   }
 }

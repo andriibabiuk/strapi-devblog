@@ -1,5 +1,17 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface SeoSeoInformation extends Struct.ComponentSchema {
+  collectionName: 'components_seo_seo_informations';
+  info: {
+    displayName: 'seoInformation';
+    icon: 'search';
+  };
+  attributes: {
+    seoDescription: Schema.Attribute.Text;
+    seoTitle: Schema.Attribute.String;
+  };
+}
+
 export interface SharedMedia extends Struct.ComponentSchema {
   collectionName: 'components_shared_media';
   info: {
@@ -65,6 +77,7 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'seo.seo-information': SeoSeoInformation;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;

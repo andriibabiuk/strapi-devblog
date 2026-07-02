@@ -481,7 +481,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiPostPost extends Struct.CollectionTypeSchema {
   collectionName: 'posts';
   info: {
-    displayName: 'post';
+    displayName: 'Post';
     pluralName: 'posts';
     singularName: 'post';
   };
@@ -499,8 +499,7 @@ export interface ApiPostPost extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::post.post'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    seoDescription: Schema.Attribute.Text;
-    seoTitle: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'seo.seo-information', false>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     tags: Schema.Attribute.Relation<'oneToMany', 'api::tag.tag'>;
     title: Schema.Attribute.String &
@@ -519,7 +518,7 @@ export interface ApiPostPost extends Struct.CollectionTypeSchema {
 export interface ApiTagTag extends Struct.CollectionTypeSchema {
   collectionName: 'tags';
   info: {
-    displayName: 'tag';
+    displayName: 'Tag';
     pluralName: 'tags';
     singularName: 'tag';
   };
