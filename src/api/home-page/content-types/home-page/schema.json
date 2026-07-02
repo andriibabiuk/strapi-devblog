@@ -36,6 +36,13 @@
       "type": "component",
       "component": "blog.posts-selection",
       "repeatable": false
+    },
+    "dynamicHomeSection": {
+      "type": "dynamiczone",
+      "components": [
+        "layout.newsletter-form",
+        "layout.mission"
+      ]
     }
   }
 }

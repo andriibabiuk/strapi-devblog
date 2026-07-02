@@ -526,6 +526,9 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    dynamicHomeSection: Schema.Attribute.DynamicZone<
+      ['layout.newsletter-form', 'layout.mission']
+    >;
     featuredCourse: Schema.Attribute.Component<'layout.featured-course', false>;
     hero: Schema.Attribute.Component<'layout.hero', false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
