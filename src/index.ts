@@ -2,6 +2,7 @@
 
 import { Core } from '@strapi/strapi';
 
+import { likePostMutation, getLikePostResolver, likePostMutationConfig } from './api/post/graphql/post';
 export default {
 	/**
 	 * An asynchronous register function that runs before
@@ -9,7 +10,22 @@ export default {
 	 *
 	 * This gives you an opportunity to extend code.
 	 */
-	register(/* { strapi }: { strapi: Core.Strapi } */) {},
+	register({ strapi }: { strapi: Core.Strapi }) {
+		const extensionService = strapi.plugin('graphql').service('extension');
+		const extension = () => ({
+			// GraphQL SDL
+			typeDefs: likePostMutation,
+			resolvers: {
+				Mutation: {
+					likePost: getLikePostResolver(strapi),
+				},
+			},
+			resolversConfig: {
+				'Mutation.likePost': likePostMutationConfig,
+			},
+		});
+		extensionService.use(extension);
+	},
 
 	/**
 	 * An asynchronous bootstrap function that runs before
