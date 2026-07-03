@@ -53,4 +53,23 @@ export default factories.createCoreService('api::post.post', ({ strapi }) => ({
 		});
 		return post?.premium ? null : post;
 	},
+	async likePost(args) {
+		const { postId, userId, query } = args;
+		const postToLike = await strapi.documents('api::post.post').findOne({
+			documentId: postId,
+			populate: ['likedBy'],
+		});
+		if (!postToLike) {
+			throw new Error('Post not found');
+		}
+		const likedBy = (postToLike.likedBy ?? []) as { id: number }[];
+		const updatedPost = await strapi.documents('api::post.post').update({
+			documentId: postId,
+			data: {
+				likedBy: [...likedBy.map((user) => user.id), userId],
+			},
+			...query,
+		});
+		return updatedPost;
+	},
 }));

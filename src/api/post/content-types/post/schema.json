@@ -54,6 +54,12 @@
       "private": true,
       "required": true,
       "default": false
+    },
+    "likedBy": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "likes"
     }
   }
 }

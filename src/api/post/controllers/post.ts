@@ -37,4 +37,16 @@ export default factories.createCoreController('api::post.post', {
 		const sanitizedEntity = await this.sanitizeOutput!(postIfPublic, ctx);
 		return this.transformResponse!(sanitizedEntity);
 	},
+	async likePost(ctx) {
+		const user = ctx.state.user;
+		const postId = ctx.params.id;
+		const { query } = ctx;
+		const updatedPost = await strapi.service('api::post.post').likePost({
+			postId,
+			userId: user.id,
+			query,
+		});
+		const sanitizedEntity = await this.sanitizeOutput!(updatedPost, ctx);
+		return this.transformResponse!(sanitizedEntity);
+	},
 });
