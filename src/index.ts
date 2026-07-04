@@ -70,20 +70,25 @@ export default {
 						},
 					})
 				)[0];
-				const { firstname, lastname, email, username, createdAt, updatedAt } =
+				const { id, firstname, lastname, email, username, createdAt, updatedAt } =
 					result;
-				await strapi
-					.service('api::author.author')
-					.update(correspondingAuthor.id, {
-						data: {
-							firstName: firstname,
-							lastName: lastname,
-							email,
-							username,
-							createdAt,
-							updatedAt,
-						},
-					});
+				const data = {
+					firstName: firstname,
+					lastName: lastname,
+					email,
+					username,
+					createdAt,
+					updatedAt,
+				};
+				if (correspondingAuthor) {
+					await strapi
+						.service('api::author.author')
+						.update(correspondingAuthor.id, { data });
+				} else {
+					await strapi
+						.service('api::author.author')
+						.create({ data: { ...data, admin_user: [id] } });
+				}
 			},
 		});
 	},
