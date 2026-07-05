@@ -31,7 +31,8 @@
     "test:ts:back": "tsc -p server/tsconfig.json"
   },
   "dependencies": {
-    "@octokit/request": "^10.0.11"
+    "@octokit/request": "^10.0.11",
+    "markdown-it": "^14.3.0"
   },
   "devDependencies": {
     "@strapi/design-system": "^2.2.1",

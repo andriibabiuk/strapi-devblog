@@ -8,6 +8,7 @@
     "console": "strapi console",
     "deploy": "strapi deploy",
     "dev": "strapi develop",
+    "dev:plugins": "npm run watch --prefix src/plugins/github-projects",
     "develop": "strapi develop",
     "seed:example": "node ./scripts/seed.js",
     "start": "strapi start",
