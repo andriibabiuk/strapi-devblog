@@ -8,10 +8,10 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
     const { id } = repo;
     const matchingProjects = await strapi.documents('plugin::github-projects.project').findMany({
       filters: {
-        repositoryId: id,
+        repositoryId: String(id),
       },
     });
-    if (matchingProjects.length == 1) return matchingProjects[0].id;
+    if (matchingProjects.length == 1) return matchingProjects[0].documentId;
     return null;
   },
   getPublicRepos: async () => {
