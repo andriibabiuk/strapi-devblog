@@ -6,12 +6,12 @@ module.exports = ({ env }: Core.Config.Shared.ConfigParams) => ({
 			provider: 'nodemailer',
 			providerOptions: {
 				host: env('SMTP_HOST', 'smtp.example.com'),
-				port: env('SMTP_PORT', 587),
+				port: env.int('SMTP_PORT', 587),
 				auth: {
 					user: env('SMTP_USERNAME'),
 					pass: env('SMTP_PASSWORD'),
 				},
-				secure: true,
+				secure: env.int('SMTP_PORT', 587) === 465,
 			},
 			settings: {
 				defaultFrom: 'info@devblog.com',

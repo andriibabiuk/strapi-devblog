@@ -33,10 +33,9 @@ const config = ({
 			},
 		},
 	},
-	// 'github-projects': {
-	// 	enabled: true,
-	// 	resolve: './src/plugins/github-projects',
-	// },
+	'github-projects': {
+		enabled: true,
+	},
 	upload: {
 		config: {
 			security: {
