@@ -1,17 +1,10 @@
 import { Box, EmptyStateLayout, Loader, Table, Tbody, Th, Thead, Tr, Typography, Checkbox } from '@strapi/design-system';
 import { useNotification } from '@strapi/strapi/admin';
 import { useEffect, useState } from 'react';
+import BulkActions from '../components/BulkActions';
 import Repo from '../components/Repo';
+import type { RepoData } from '../types';
 import axios from '../utils/axiosInstance';
-
-interface RepoData {
-  id: number;
-  name: string;
-  shortDescription: string | null;
-  url: string;
-  longDescription: string | null;
-  projectId: string | null;
-}
 
 const COL_COUNT = 5;
 
@@ -94,6 +87,72 @@ const HomePage = () => {
     }
   };
 
+  const bulkCreateProjects = async (targetRepos: RepoData[]) => {
+    const results = await Promise.allSettled(
+      targetRepos.map((repo) =>
+        axios.post('/github-projects/project', repo).then((response) => ({ repo, documentId: response.data.documentId }))
+      )
+    );
+
+    const succeeded = results.filter(
+      (result): result is PromiseFulfilledResult<{ repo: RepoData; documentId: string }> => result.status === 'fulfilled'
+    );
+    const failedCount = results.length - succeeded.length;
+
+    if (succeeded.length > 0) {
+      setRepos((prev) =>
+        prev.map((item) => {
+          const match = succeeded.find((result) => result.value.repo.id === item.id);
+          return match ? { ...item, projectId: match.value.documentId } : item;
+        })
+      );
+      toggleNotification({
+        type: 'success',
+        title: 'Projects created',
+        message: `Successfully created ${succeeded.length} project(s).`,
+      });
+    }
+    if (failedCount > 0) {
+      toggleNotification({
+        type: 'danger',
+        title: 'An error occurred',
+        message: `Failed to create ${failedCount} project(s).`,
+      });
+    }
+
+    setSelectedIds([]);
+  };
+
+  const bulkDeleteProjects = async (targetRepos: RepoData[]) => {
+    const results = await Promise.allSettled(
+      targetRepos.map((repo) => axios.delete(`/github-projects/project/${repo.projectId}`).then(() => repo))
+    );
+
+    const succeeded = results.filter(
+      (result): result is PromiseFulfilledResult<RepoData> => result.status === 'fulfilled'
+    );
+    const failedCount = results.length - succeeded.length;
+
+    if (succeeded.length > 0) {
+      const succeededIds = new Set(succeeded.map((result) => result.value.id));
+      setRepos((prev) => prev.map((item) => (succeededIds.has(item.id) ? { ...item, projectId: null } : item)));
+      toggleNotification({
+        type: 'success',
+        title: 'Projects deleted',
+        message: `Successfully deleted ${succeeded.length} project(s).`,
+      });
+    }
+    if (failedCount > 0) {
+      toggleNotification({
+        type: 'danger',
+        title: 'An error occurred',
+        message: `Failed to delete ${failedCount} project(s).`,
+      });
+    }
+
+    setSelectedIds([]);
+  };
+
   if (loading) {
     return (
       <Box padding={8} background="neutral100">
@@ -120,6 +179,11 @@ const HomePage = () => {
 
   return (
     <Box padding={8} background="neutral100">
+      <BulkActions
+        selectedRepos={repos.filter((repo) => selectedIds.includes(repo.id))}
+        onBulkCreate={bulkCreateProjects}
+        onBulkDelete={bulkDeleteProjects}
+      />
       <Table colCount={COL_COUNT} rowCount={repos.length + 1}>
         <Thead>
           <Tr>

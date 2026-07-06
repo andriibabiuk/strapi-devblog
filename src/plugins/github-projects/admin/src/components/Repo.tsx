@@ -2,15 +2,7 @@ import { Button, Checkbox, Dialog, Flex, IconButton, Td, Tr, Typography } from '
 import { Pencil, Plus, Trash, WarningCircle } from '@strapi/icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-interface RepoData {
-  id: number;
-  name: string;
-  shortDescription: string | null;
-  url: string;
-  longDescription: string | null;
-  projectId: string | null;
-}
+import type { RepoData } from '../types';
 
 interface RepoProps {
   repo: RepoData;
