@@ -52,5 +52,23 @@ export default () => ({
         ],
       },
     },
+    {
+      method: 'GET',
+      path: '/projects',
+      handler: 'projectsController.find',
+      config: {
+        auth: false,
+        prefix: false,
+      },
+    },
+    {
+      method: 'GET',
+      path: '/projects/:id',
+      handler: 'projectsController.findOne',
+      config: {
+        auth: false,
+        prefix: false,
+      },
+    },
   ],
 });

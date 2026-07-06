@@ -16,6 +16,12 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
   deleteProject: async (documentId: string) => {
     return strapi.documents('plugin::github-projects.project').delete({ documentId });
   },
+  find: async (params) => {
+    return strapi.documents('plugin::github-projects.project').findMany(params);
+  },
+  findOne: async (documentId, params) => {
+    return strapi.documents('plugin::github-projects.project').findOne({ documentId, ...params });
+  },
 });
 
 export default service;
