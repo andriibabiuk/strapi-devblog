@@ -1,11 +1,23 @@
-import { Box, EmptyStateLayout, Loader, Table, Tbody, Th, Thead, Tr, Typography, Checkbox } from '@strapi/design-system';
+import {
+  Box,
+  EmptyStateLayout,
+  Loader,
+  Table,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
+  Typography,
+  Checkbox,
+} from '@strapi/design-system';
 import { useNotification } from '@strapi/strapi/admin';
 import { useEffect, useState } from 'react';
 import BulkActions from '../components/BulkActions';
 import Repo from '../components/Repo';
 import type { RepoData } from '../types';
 import axios from '../utils/axiosInstance';
-
+import { useIntl } from 'react-intl';
+import { getTranslation } from '../utils/getTranslation';
 const COL_COUNT = 5;
 
 const HomePage = () => {
@@ -14,7 +26,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>(undefined);
   const { toggleNotification } = useNotification();
-
+  const { formatMessage } = useIntl();
   useEffect(() => {
     let cancelled = false;
 
@@ -44,14 +56,18 @@ const HomePage = () => {
   };
 
   const toggleSelect = (id: number) => {
-    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((selectedId) => selectedId !== id) : [...prev, id]));
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((selectedId) => selectedId !== id) : [...prev, id]
+    );
   };
 
   const createProject = async (repo: RepoData) => {
     try {
       const response = await axios.post('/github-projects/project', repo);
       setRepos((prev) =>
-        prev.map((item) => (item.id !== repo.id ? item : { ...item, projectId: response.data.documentId }))
+        prev.map((item) =>
+          item.id !== repo.id ? item : { ...item, projectId: response.data.documentId }
+        )
       );
       toggleNotification({
         type: 'success',
@@ -72,7 +88,9 @@ const HomePage = () => {
 
     try {
       await axios.delete(`/github-projects/project/${repo.projectId}`);
-      setRepos((prev) => prev.map((item) => (item.id !== repo.id ? item : { ...item, projectId: null })));
+      setRepos((prev) =>
+        prev.map((item) => (item.id !== repo.id ? item : { ...item, projectId: null }))
+      );
       toggleNotification({
         type: 'success',
         title: 'Project deleted',
@@ -90,12 +108,15 @@ const HomePage = () => {
   const bulkCreateProjects = async (targetRepos: RepoData[]) => {
     const results = await Promise.allSettled(
       targetRepos.map((repo) =>
-        axios.post('/github-projects/project', repo).then((response) => ({ repo, documentId: response.data.documentId }))
+        axios
+          .post('/github-projects/project', repo)
+          .then((response) => ({ repo, documentId: response.data.documentId }))
       )
     );
 
     const succeeded = results.filter(
-      (result): result is PromiseFulfilledResult<{ repo: RepoData; documentId: string }> => result.status === 'fulfilled'
+      (result): result is PromiseFulfilledResult<{ repo: RepoData; documentId: string }> =>
+        result.status === 'fulfilled'
     );
     const failedCount = results.length - succeeded.length;
 
@@ -125,7 +146,9 @@ const HomePage = () => {
 
   const bulkDeleteProjects = async (targetRepos: RepoData[]) => {
     const results = await Promise.allSettled(
-      targetRepos.map((repo) => axios.delete(`/github-projects/project/${repo.projectId}`).then(() => repo))
+      targetRepos.map((repo) =>
+        axios.delete(`/github-projects/project/${repo.projectId}`).then(() => repo)
+      )
     );
 
     const succeeded = results.filter(
@@ -135,7 +158,9 @@ const HomePage = () => {
 
     if (succeeded.length > 0) {
       const succeededIds = new Set(succeeded.map((result) => result.value.id));
-      setRepos((prev) => prev.map((item) => (succeededIds.has(item.id) ? { ...item, projectId: null } : item)));
+      setRepos((prev) =>
+        prev.map((item) => (succeededIds.has(item.id) ? { ...item, projectId: null } : item))
+      );
       toggleNotification({
         type: 'success',
         title: 'Projects deleted',
@@ -195,16 +220,36 @@ const HomePage = () => {
               />
             </Th>
             <Th>
-              <Typography variant="sigma">Name</Typography>
+              <Typography variant="sigma">
+                {formatMessage({
+                  id: getTranslation('repo.name'),
+                  defaultMessage: 'Name',
+                })}
+              </Typography>
             </Th>
             <Th>
-              <Typography variant="sigma">Description</Typography>
+              <Typography variant="sigma">
+                {formatMessage({
+                  id: getTranslation('repo.description'),
+                  defaultMessage: 'Description',
+                })}
+              </Typography>
             </Th>
             <Th>
-              <Typography variant="sigma">Url</Typography>
+              <Typography variant="sigma">
+                {formatMessage({
+                  id: getTranslation('repo.url'),
+                  defaultMessage: 'Url',
+                })}
+              </Typography>
             </Th>
             <Th>
-              <Typography variant="sigma">Actions</Typography>
+              <Typography variant="sigma">
+                {formatMessage({
+                  id: getTranslation('repo.actions'),
+                  defaultMessage: 'Actions',
+                })}
+              </Typography>
             </Th>
           </Tr>
         </Thead>
