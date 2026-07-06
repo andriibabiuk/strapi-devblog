@@ -1,11 +1,11 @@
-import { getTranslation } from "./utils/getTranslation";
-import { PLUGIN_ID } from "./pluginId";
-import { Initializer } from "./components/Initializer";
-import { PluginIcon } from "./components/PluginIcon";
+import { Initializer } from './components/Initializer';
+import { PluginIcon } from './components/PluginIcon';
+import { PLUGIN_ID } from './pluginId';
+import { getTranslation } from './utils/getTranslation';
 
-import type { StrapiApp } from "@strapi/strapi/admin";
+import type { StrapiApp } from '@strapi/strapi/admin';
 
-const plugin: StrapiApp["appPlugins"][string] = {
+const plugin: StrapiApp['appPlugins'][string] = {
   register(app) {
     app.addMenuLink({
       to: `plugins/${PLUGIN_ID}`,
@@ -14,8 +14,13 @@ const plugin: StrapiApp["appPlugins"][string] = {
         id: `${PLUGIN_ID}.plugin.name`,
         defaultMessage: PLUGIN_ID,
       },
-      Component: () => import("./pages/App"),
-      permissions: [],
+      Component: () => import('./pages/App'),
+      permissions: [
+        {
+          action: 'plugin::github-projects.use',
+          subject: null,
+        },
+      ],
     });
 
     app.registerPlugin({
@@ -30,9 +35,7 @@ const plugin: StrapiApp["appPlugins"][string] = {
     return Promise.all(
       locales.map(async (locale) => {
         try {
-          const { default: data } = (await import(
-            `./translations/${locale}.json`
-          )) as {
+          const { default: data } = (await import(`./translations/${locale}.json`)) as {
             default: Record<string, string>;
           };
 
@@ -47,7 +50,7 @@ const plugin: StrapiApp["appPlugins"][string] = {
         } catch {
           return { data: {}, locale };
         }
-      }),
+      })
     );
   },
 };
