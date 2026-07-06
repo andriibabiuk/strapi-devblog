@@ -20,6 +20,9 @@ const config = ({
 				database: database ?? 'strapi',
 				user: user ?? 'strapi',
 				password: password ?? 'strapi',
+				ssl: env.bool('DATABASE_SSL', true) && {
+					rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', false),
+				},
 			},
 			debug: false,
 		},
